@@ -49,39 +49,40 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-md p-6 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-2xl">
-        {/* Кнопка закрытия */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* Переключатель Вход / Регистрация */}
-        <div className="flex rounded-xl bg-zinc-950 p-1 border border-zinc-850 mb-6">
+        {/* Переключатель Вход / Регистрация и кнопка закрытия */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 flex rounded-xl bg-zinc-950 p-1 border border-zinc-850">
+            <button
+              type="button"
+              onClick={() => {
+                setIsRegister(false);
+                setError(null);
+              }}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                !isRegister ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Вход в профиль
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsRegister(true);
+                setError(null);
+              }}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                isRegister ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Регистрация
+            </button>
+          </div>
           <button
             type="button"
-            onClick={() => {
-              setIsRegister(false);
-              setError(null);
-            }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition ${
-              !isRegister ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-            }`}
+            onClick={onClose}
+            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition flex-shrink-0 cursor-pointer border border-transparent hover:border-zinc-700"
           >
-            Вход в профиль
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setIsRegister(true);
-              setError(null);
-            }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition ${
-              isRegister ? 'bg-zinc-800 text-white shadow' : 'text-zinc-400 hover:text-zinc-200'
-            }`}
-          >
-            Регистрация
+            <X className="w-5 h-5" />
           </button>
         </div>
 
