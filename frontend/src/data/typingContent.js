@@ -22,7 +22,7 @@ export const KEY_TO_FINGER = {
   'a': 'left-pinky', 'A': 'left-pinky', 'ф': 'left-pinky', 'Ф': 'left-pinky',
   'z': 'left-pinky', 'Z': 'left-pinky', 'я': 'left-pinky', 'Я': 'left-pinky',
   '`': 'left-pinky', '~': 'left-pinky', 'ё': 'left-pinky', 'Ё': 'left-pinky',
-  'Tab': 'left-pinky', 'CapsLock': 'left-pinky', 'ShiftLeft': 'left-pinky',
+  'Tab': 'left-pinky', '\t': 'left-pinky', 'CapsLock': 'left-pinky', 'ShiftLeft': 'left-pinky',
 
   // Левый безымянный
   '2': 'left-ring', '@': 'left-ring', '"': 'left-ring',
@@ -86,7 +86,7 @@ export const KEY_TO_FINGER = {
 // Получение информации о пальце для конкретного символа
 export function getFingerForKey(char) {
   if (!char) return null;
-  const lookup = char === '\n' ? 'Enter' : char;
+  const lookup = char === '\n' ? 'Enter' : (char === '\t' || char === 'Tab') ? 'Tab' : char;
   const fingerId = KEY_TO_FINGER[lookup] || KEY_TO_FINGER[lookup.toLowerCase()] || 'thumbs';
   return {
     fingerId,
@@ -191,18 +191,18 @@ export const TYPING_CONTENT = {
   code: {
     python: {
       easy: [
-        'def add(a, b):\n    return a + b',
-        'for i in range(10):\n    print("Value:", i)',
+        'def add(a, b):\n\treturn a + b',
+        'for i in range(10):\n\tprint("Value:", i)',
         'numbers = [1, 2, 3, 4, 5]\ntotal = sum(numbers)',
       ],
       medium: [
-        'def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b',
-        'class User:\n    def __init__(self, username, level=1):\n        self.username = username\n        self.level = level',
-        'def get_evens(nums):\n    return [x for x in nums if x % 2 == 0]',
+        'def fibonacci(n):\n\ta, b = 0, 1\n\tfor _ in range(n):\n\t\tyield a\n\t\ta, b = b, a + b',
+        'class User:\n\tdef __init__(self, username, level=1):\n\t\tself.username = username\n\t\tself.level = level',
+        'def get_evens(nums):\n\treturn [x for x in nums if x % 2 == 0]',
       ],
       hard: [
-        'def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + middle + quick_sort(right)',
-        'import asyncio\nasync def fetch_all(urls):\n    tasks = [fetch_one(u) for u in urls]\n    return await asyncio.gather(*tasks)',
+        'def quick_sort(arr):\n\tif len(arr) <= 1:\n\t\treturn arr\n\tpivot = arr[len(arr) // 2]\n\tleft = [x for x in arr if x < pivot]\n\tmiddle = [x for x in arr if x == pivot]\n\tright = [x for x in arr if x > pivot]\n\treturn quick_sort(left) + middle + quick_sort(right)',
+        'import asyncio\nasync def fetch_all(urls):\n\ttasks = [fetch_one(u) for u in urls]\n\treturn await asyncio.gather(*tasks)',
       ],
     },
     javascript: {
@@ -212,32 +212,32 @@ export const TYPING_CONTENT = {
         'const fruits = ["apple", "banana", "orange"];',
       ],
       medium: [
-        'export function binarySearch(arr, target) {\n  let left = 0, right = arr.length - 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}',
+        'export function binarySearch(arr, target) {\n\tlet left = 0, right = arr.length - 1;\n\twhile (left <= right) {\n\t\tconst mid = Math.floor((left + right) / 2);\n\t\tif (arr[mid] === target) return mid;\n\t\tif (arr[mid] < target) left = mid + 1;\n\t\telse right = mid - 1;\n\t}\n\treturn -1;\n}',
         'const filterActive = (users) => users.filter(u => u.isActive && u.level >= 5);',
       ],
       hard: [
-        'const debounce = (fn, delay = 300) => {\n  let timer = null;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n};',
-        'class EventEmitter {\n  constructor() {\n    this.events = new Map();\n  }\n  on(name, fn) {\n    if (!this.events.has(name)) this.events.set(name, []);\n    this.events.get(name).push(fn);\n  }\n}',
+        'const debounce = (fn, delay = 300) => {\n\tlet timer = null;\n\treturn (...args) => {\n\t\tclearTimeout(timer);\n\t\ttimer = setTimeout(() => fn(...args), delay);\n\t};\n};',
+        'class EventEmitter {\n\tconstructor() {\n\t\tthis.events = new Map();\n\t}\n\ton(name, fn) {\n\t\tif (!this.events.has(name)) this.events.set(name, []);\n\t\tthis.events.get(name).push(fn);\n\t}\n}',
       ],
     },
     html_css: {
       easy: [
-        '<div class="flex items-center gap-2">\n  <span class="text-sm">Hello</span>\n</div>',
-        '<button type="button" class="btn-primary">\n  Отправить\n</button>',
+        '<div class="flex items-center gap-2">\n\t<span class="text-sm">Hello</span>\n</div>',
+        '<button type="button" class="btn-primary">\n\tОтправить\n</button>',
         '<input type="text" placeholder="Введите имя..." />',
       ],
       medium: [
-        '.card {\n  display: flex;\n  border-radius: 8px;\n  background: #18181b;\n  border: 1px solid #27272a;\n}',
-        '@media (min-width: 768px) {\n  .container {\n    max-width: 720px;\n    margin: 0 auto;\n  }\n}',
+        '.card {\n\tdisplay: flex;\n\tborder-radius: 8px;\n\tbackground: #18181b;\n\tborder: 1px solid #27272a;\n}',
+        '@media (min-width: 768px) {\n\t.container {\n\t\tmax-width: 720px;\n\t\tmargin: 0 auto;\n\t}\n}',
       ],
       hard: [
-        ':root {\n  --primary: #6366f1;\n  --background: #09090b;\n  --text: #f4f4f5;\n  --transition: all 0.2s ease;\n}\n.glow {\n  box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);\n}',
+        ':root {\n\t--primary: #6366f1;\n\t--background: #09090b;\n\t--text: #f4f4f5;\n\t--transition: all 0.2s ease;\n}\n.glow {\n\tbox-shadow: 0 0 20px rgba(99, 102, 241, 0.35);\n}',
       ],
     },
     ru: {
-      easy: ['def greet(name):\n    return f"Привет, {name}!"'],
-      medium: ['def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b'],
-      hard: ['def quick_sort(arr):\n    return arr'],
+      easy: ['def greet(name):\n\treturn f"Привет, {name}!"'],
+      medium: ['def fibonacci(n):\n\ta, b = 0, 1\n\tfor _ in range(n):\n\t\tyield a\n\t\ta, b = b, a + b'],
+      hard: ['def quick_sort(arr):\n\treturn arr'],
     },
     en: {
       easy: ['const sum = (a, b) => a + b;'],
@@ -308,9 +308,81 @@ export function getRandomTypingText(mode = 'words', language = 'ru', difficulty 
     selectedText = 'Печать героя - тренируй слепую печать каждый день.';
   }
 
+  // Для режима кода: приводим отступы в начале строк к знакам табуляции (\t) для набора через клавишу Tab
+  if (mode === 'code' && selectedText) {
+    selectedText = selectedText.split('\n').map(line => {
+      const match = line.match(/^ +/);
+      if (!match) return line;
+      const spaces = match[0].length;
+      if (spaces % 4 === 0) {
+        return '\t'.repeat(spaces / 4) + line.slice(spaces);
+      }
+      if (spaces % 2 === 0) {
+        return '\t'.repeat(spaces / 2) + line.slice(spaces);
+      }
+      return '\t'.repeat(Math.max(1, Math.round(spaces / 2))) + line.slice(spaces);
+    }).join('\n');
+  }
+
   // Заменяем любые длинные и средние тире на стандартный дефис/тире '-'
   return (selectedText || '').replace(/[\u2012\u2013\u2014\u2015\u2212]/g, '-');
 }
+
+// Обширные словари полноценных слов для персональной тренировки слабых клавиш
+const WEAK_KEYS_WORDS_RU = [
+  'автоматика', 'акцент', 'анализ', 'арена', 'архив', 'баланс', 'барьер', 'безопасность', 'библиотека', 'быстрота',
+  'вектор', 'вершина', 'внимание', 'возможность', 'волна', 'время', 'вызов', 'выносливость', 'высота', 'гармония',
+  'генератор', 'герой', 'гибкость', 'главный', 'глубина', 'горизонт', 'город', 'градус', 'границы', 'движение',
+  'действие', 'диалог', 'динамика', 'дистанция', 'дифференциал', 'доверие', 'достижение', 'доступ', 'драйв', 'дыхание',
+  'единство', 'емкость', 'естественный', 'желание', 'железо', 'жизнь', 'журнал', 'задача', 'замысел', 'защита',
+  'звезда', 'звук', 'знание', 'значение', 'золото', 'идеал', 'измерение', 'импульс', 'индикатор', 'инициатива',
+  'инструмент', 'интуиция', 'искра', 'канал', 'качество', 'клавиша', 'клиент', 'команда', 'комплекс', 'контроль',
+  'координация', 'критерий', 'курс', 'лидер', 'линия', 'ловкость', 'логика', 'лучший', 'максимум', 'мастерство',
+  'механизм', 'минимум', 'минута', 'модуль', 'момент', 'мотивация', 'мощность', 'навык', 'надежность', 'направление',
+  'настройка', 'начало', 'номинал', 'образ', 'обучение', 'объем', 'огонь', 'оптимизация', 'опыт', 'ориентир',
+  'основа', 'отклик', 'память', 'панель', 'параметр', 'пальцы', 'печать', 'пик', 'плавность', 'платформа',
+  'победа', 'подвиг', 'позиция', 'поиск', 'полет', 'понимание', 'порядок', 'потенциал', 'поток', 'правило',
+  'практика', 'предел', 'принцип', 'проверка', 'программа', 'прогресс', 'прорыв', 'процесс', 'путь', 'работа',
+  'радар', 'развитие', 'разгон', 'ракета', 'реакция', 'реализация', 'режим', 'результат', 'рекорд', 'ресурс',
+  'решение', 'ритм', 'рубеж', 'самоконтроль', 'секунда', 'сервер', 'сеть', 'сигнал', 'символ', 'синхронизация',
+  'система', 'скорость', 'совершенство', 'созидание', 'сосредоточение', 'состояние', 'сохранение', 'специалист',
+  'способность', 'спринт', 'стабильность', 'стандарт', 'старт', 'стимул', 'стихия', 'стратегия', 'стремление',
+  'структура', 'тактика', 'талант', 'темп', 'теория', 'терпение', 'техника', 'технология', 'точность', 'траектория',
+  'тренировка', 'триумф', 'уверенность', 'удар', 'удача', 'узел', 'умение', 'универсал', 'управление', 'упорство',
+  'уровень', 'ускорение', 'успех', 'устойчивость', 'фактор', 'финал', 'фокус', 'форма', 'формула', 'функция',
+  'характер', 'хватка', 'ход', 'храбрость', 'целеустремленность', 'цель', 'центр', 'цикл', 'цифра', 'частота',
+  'чемпион', 'черта', 'чистота', 'шаг', 'шанс', 'шкала', 'штурм', 'щедрость', 'щит', 'эволюция',
+  'экран', 'эксперт', 'элемент', 'энергия', 'эпицентр', 'эталон', 'этап', 'эффект', 'эффективность', 'ювелир',
+  'юность', 'ядро', 'яркость', 'ясность'
+];
+
+const WEAK_KEYS_WORDS_EN = [
+  'accuracy', 'action', 'active', 'adaptive', 'advanced', 'agility', 'algorithm', 'altitude', 'amplitude', 'anchor',
+  'balance', 'barrier', 'battery', 'benchmark', 'blazing', 'booster', 'bravery', 'buffer', 'builder', 'button',
+  'cadence', 'caliber', 'capacity', 'capture', 'catalyst', 'champion', 'channel', 'circuit', 'clarity', 'command',
+  'compact', 'complex', 'concept', 'conquest', 'constant', 'control', 'courage', 'current', 'database', 'decimal',
+  'decisive', 'density', 'developer', 'dexterity', 'dialog', 'digital', 'direct', 'discipline', 'distance', 'dynamic',
+  'element', 'elevation', 'engine', 'essence', 'evolution', 'execute', 'expert', 'factor', 'feedback', 'fighter',
+  'filter', 'finger', 'flight', 'fluent', 'focus', 'formula', 'forward', 'fraction', 'freedom', 'frequency',
+  'friction', 'frontier', 'future', 'galaxy', 'gateway', 'genius', 'gradient', 'gravity', 'guidance', 'hardware',
+  'harmony', 'header', 'height', 'horizon', 'identity', 'impact', 'impulse', 'index', 'indicator', 'infinite',
+  'insight', 'instant', 'integer', 'intensity', 'interface', 'interval', 'journey', 'judgment', 'junction', 'keyboard',
+  'keystroke', 'kinetic', 'launch', 'layout', 'leader', 'legend', 'level', 'lightning', 'linear', 'logic',
+  'magnitude', 'mastery', 'matrix', 'maximum', 'measure', 'mechanism', 'melody', 'memory', 'method', 'metric',
+  'minimum', 'mission', 'module', 'momentum', 'monitor', 'motion', 'navigate', 'network', 'neutral', 'objective',
+  'operator', 'optimal', 'orbit', 'origin', 'output', 'pacemaker', 'parallel', 'parameter', 'pattern', 'performance',
+  'phantom', 'pioneer', 'pipeline', 'platform', 'pointer', 'position', 'power', 'precision', 'preview', 'primary',
+  'priority', 'process', 'profile', 'progress', 'protocol', 'pulse', 'quantum', 'quickness', 'radiant', 'radius',
+  'reaction', 'record', 'reflex', 'register', 'regular', 'reliable', 'request', 'resonance', 'response', 'restart',
+  'result', 'rhythm', 'routine', 'running', 'runtime', 'sample', 'scale', 'scanner', 'schedule', 'segment',
+  'sequence', 'signal', 'simplicity', 'skill', 'smooth', 'software', 'spectrum', 'speed', 'spiral', 'stamina',
+  'standard', 'station', 'stealth', 'storage', 'strategy', 'strength', 'structure', 'success', 'summit', 'swift',
+  'symbol', 'symmetry', 'synchrony', 'system', 'tactile', 'target', 'technique', 'terminal', 'texture', 'theory',
+  'threshold', 'timeline', 'tolerance', 'torque', 'tracking', 'training', 'transit', 'trigger', 'triumph', 'ultimate',
+  'universal', 'upgrade', 'valiant', 'velocity', 'venture', 'version', 'vertical', 'vessel', 'vibration', 'victory',
+  'vigilant', 'virtual', 'vision', 'vortex', 'warrior', 'wavelength', 'weapon', 'weight', 'winner', 'wireless',
+  'wizard', 'zenith'
+];
 
 // Генерация текста для режима работы над ошибками
 export function generateWeakKeysText(problemKeys = {}, language = 'ru', wordCount = 20) {
@@ -318,32 +390,48 @@ export function generateWeakKeysText(problemKeys = {}, language = 'ru', wordCoun
   const keys = Object.entries(problemKeys)
     .sort((a, b) => b[1] - a[1])
     .map(entry => entry[0].toLowerCase())
-    .filter(k => k.trim().length > 0);
+    .filter(k => k.trim().length > 0 && k !== 'enter' && k !== 'tab');
+
+  const dict = language === 'en' ? WEAK_KEYS_WORDS_EN : WEAK_KEYS_WORDS_RU;
 
   // Если проблемных клавиш пока нет, возвращаем стандартные слова
   if (keys.length === 0) {
-    return getRandomTypingText('words', language, 'easy');
+    return getRandomTypingText('words', language, 'medium');
   }
 
-  // Фильтруем слова из банка, содержащие проблемные символы
-  const bank = TYPING_CONTENT.words[language]?.medium?.list || TYPING_CONTENT.words.ru.medium.list;
-  const matchingWords = bank.filter(word => {
-    return keys.some(key => word.includes(key));
-  });
+  // Оцениваем слова по содержанию проблемных символов (чем выше в топе ошибок буква, тем больше вес слова)
+  const scoredWords = dict.map(word => {
+    const lowerWord = word.toLowerCase();
+    let score = 0;
+    keys.forEach((key, idx) => {
+      if (lowerWord.includes(key)) {
+        score += Math.max(1, (keys.length - idx) * 3);
+      }
+    });
+    return { word, score };
+  }).filter(item => item.score > 0);
 
-  const pool = matchingWords.length >= 5 ? matchingWords : bank;
+  const pool = scoredWords.length >= 8
+    ? scoredWords
+    : dict.map(w => ({ word: w, score: 1 }));
+
+  // Сортируем по весу соответствия проблемным буквам
+  pool.sort((a, b) => b.score - a.score);
+
+  // Выбираем пул наиболее релевантных слов
+  const candidatePool = pool.slice(0, Math.max(wordCount * 2, 25));
+
   const resultWords = [];
+  let prevWord = '';
 
   for (let i = 0; i < wordCount; i++) {
-    // Чередуем слово из словаря и специальные связки проблемных букв
-    if (i % 3 === 2 && keys.length > 0) {
-      const k1 = keys[Math.floor(Math.random() * keys.length)];
-      const k2 = keys[Math.floor(Math.random() * keys.length)];
-      resultWords.push(`${k1}${k2}${k1}`);
-    } else {
-      const w = pool[Math.floor(Math.random() * pool.length)];
-      resultWords.push(w);
-    }
+    const available = candidatePool.filter(c => c.word !== prevWord);
+    const chosen = available.length > 0
+      ? available[Math.floor(Math.random() * available.length)].word
+      : candidatePool[Math.floor(Math.random() * candidatePool.length)].word;
+
+    resultWords.push(chosen);
+    prevWord = chosen;
   }
 
   return resultWords.join(' ').replace(/[\u2012\u2013\u2014\u2015\u2212]/g, '-');

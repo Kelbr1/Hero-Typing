@@ -245,21 +245,21 @@ export default function TypingArena({ user, onUserUpdate, onOpenAuth, initialMod
   // Обработка клавиатурного ввода
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Предотвращаем скролл страницы браузера при нажатии пробела и Enter
-      if (e.key === ' ' || e.key === 'Enter') {
+      // Предотвращаем скролл страницы и переключение фокуса по Tab при наборе текста
+      if (e.key === ' ' || e.key === 'Enter' || e.key === 'Tab') {
         e.preventDefault();
       }
 
-      // Горячие клавиши на экране результатов (Enter или Tab+Enter)
+      // Горячие клавиши на экране результатов (Enter или Tab)
       if (isFinished) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.key === 'Tab') {
           initExercise(mode, language, difficulty, codeLang);
         }
         return;
       }
 
-      // Служебные клавиши
-      if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab'].includes(e.key)) {
+      // Служебные клавиши (Tab обрабатывается как печатная клавиша отступа)
+      if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(e.key)) {
         return;
       }
 
@@ -291,6 +291,7 @@ export default function TypingArena({ user, onUserUpdate, onOpenAuth, initialMod
       const isCorrectKey =
         e.key === expectedChar ||
         (e.key === 'Enter' && (expectedChar === '\n' || expectedChar === '\r')) ||
+        (e.key === 'Tab' && expectedChar === '\t') ||
         isDashMatch;
 
       if (isCorrectKey) {
@@ -328,7 +329,7 @@ export default function TypingArena({ user, onUserUpdate, onOpenAuth, initialMod
         setComboStreak(0);
 
         // Запись проблемного символа
-        const problemChar = (expectedChar === '\n' || expectedChar === '\r') ? 'Enter' : expectedChar;
+        const problemChar = (expectedChar === '\n' || expectedChar === '\r') ? 'Enter' : expectedChar === '\t' ? 'Tab' : expectedChar;
         if (problemChar && problemChar !== ' ') {
           setProblemKeys((prev) => ({
             ...prev,
@@ -571,7 +572,7 @@ export default function TypingArena({ user, onUserUpdate, onOpenAuth, initialMod
                   : 'bg-indigo-500/25 border-b-2 border-indigo-400 text-white rounded-sm px-0.5 animate-pulse';
               }
 
-              // Отображение переносов строк и пробелов
+              // Отображение переносов строк, табуляций и пробелов
               if (char === '\n') {
                 return (
                   <React.Fragment key={idx}>
@@ -580,6 +581,25 @@ export default function TypingArena({ user, onUserUpdate, onOpenAuth, initialMod
                     </span>
                     <div className="w-full h-0" />
                   </React.Fragment>
+                );
+              }
+
+              if (char === '\t') {
+                return (
+                  <span
+                    key={idx}
+                    className={`inline-flex items-center px-2 py-0.5 mx-1 my-0.5 text-xs font-mono font-bold rounded border transition-all ${
+                      isCurrent
+                        ? isWrongCharActive
+                          ? 'bg-rose-500/30 text-rose-300 border-rose-400 ring-2 ring-rose-500/40 animate-pulse'
+                          : 'bg-indigo-500/30 border-indigo-400 text-indigo-200 ring-2 ring-indigo-500/40 animate-pulse'
+                        : idx < charIndex
+                        ? 'text-emerald-400/90 border-emerald-500/30 bg-emerald-950/20'
+                        : 'text-zinc-500 border-zinc-800 bg-zinc-900/60'
+                    }`}
+                  >
+                    ⇥ TAB
+                  </span>
                 );
               }
 

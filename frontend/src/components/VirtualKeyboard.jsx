@@ -98,7 +98,7 @@ const FINGER_ZONE_STYLES = {
 
 // Определение необходимости нажатия Shift для символа
 function checkRequiresShift(char, language) {
-  if (!char || char === ' ' || char === '\n') return false;
+  if (!char || char === ' ' || char === '\n' || char === '\t' || char === 'Tab') return false;
 
   // Прописные буквы
   if (char !== char.toLowerCase() && /[A-ZА-ЯЁ]/.test(char)) {
@@ -121,8 +121,9 @@ function checkRequiresShift(char, language) {
 // Определение кода целевой клавиши по символу
 function findTargetKeyCode(char, language) {
   if (!char) return null;
-  if (char === ' ') return 'Space';
-  if (char === '\n') return 'Enter';
+  if (char === ' ' || char === 'Space') return 'Space';
+  if (char === '\n' || char === 'Enter') return 'Enter';
+  if (char === '\t' || char === 'Tab') return 'Tab';
   if (['—', '–', '−', '―', '‒'].includes(char)) return 'Minus';
 
   for (const row of KEYBOARD_ROWS) {
@@ -216,7 +217,7 @@ export default function VirtualKeyboard({
                 Следующая клавиша:
               </span>
               <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 font-mono font-bold text-xs sm:text-sm">
-                {targetChar === ' ' ? 'Пробел' : targetChar === '\n' || targetChar === '\r' ? 'Enter' : ['—', '–', '−', '―', '‒'].includes(targetChar) ? '-' : targetChar || '-'}
+                {targetChar === ' ' ? 'Пробел' : targetChar === '\n' || targetChar === '\r' ? 'Enter' : targetChar === '\t' || targetChar === 'Tab' ? 'Tab' : ['—', '–', '−', '―', '‒'].includes(targetChar) ? '-' : targetChar || '-'}
               </span>
               {requiresShift && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono">
